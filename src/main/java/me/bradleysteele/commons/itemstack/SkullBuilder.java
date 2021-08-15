@@ -20,11 +20,11 @@ import me.bradleysteele.commons.nms.wrapped.profile.NMSGameProfile;
 import me.bradleysteele.commons.nms.wrapped.profile.NMSProperty;
 import me.bradleysteele.commons.util.Players;
 import me.bradleysteele.commons.util.reflect.Reflection;
-import org.apache.commons.codec.binary.Base64;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -69,7 +69,7 @@ public class SkullBuilder extends ItemStackBuilder {
 
         if (url != null) {
             NMSGameProfile profile = new NMSGameProfile(UUID.randomUUID(), null);
-            profile.getProperties().put("textures", new NMSProperty("textures", new String(Base64.encodeBase64(String.format(TEXTURES_JSON, url).getBytes()))));
+            profile.getProperties().put("textures", new NMSProperty("textures", Base64.getMimeEncoder().encodeToString(String.format(TEXTURES_JSON, url).getBytes())));
 
             // Apply to meta
             Reflection.setFieldValue("profile", meta, profile.getNMSHandle());
