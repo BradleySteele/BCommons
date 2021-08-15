@@ -24,7 +24,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -32,6 +31,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -88,7 +88,7 @@ public final class OfflinePlayers {
                     JsonObject properties = array.get(array.size() - 1).getAsJsonObject();
 
                     // texture
-                    JsonObject value = parser.parse(new String(Base64.decodeBase64(properties.get("value").toString().getBytes()))).getAsJsonObject();
+                    JsonObject value = parser.parse(new String(Base64.getMimeDecoder().decode(properties.get("value").toString()))).getAsJsonObject();
                     JsonObject textures = value.get("textures").getAsJsonObject();
                     JsonObject skin = textures.get("SKIN").getAsJsonObject();
 
