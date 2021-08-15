@@ -16,7 +16,6 @@
 
 package me.bradleysteele.commons.util;
 
-import com.google.common.base.Charsets;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -32,6 +31,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -160,6 +160,6 @@ public final class OfflinePlayers {
 
     private static JsonElement getResponse(String url) throws IOException {
         HttpResponse response = client.execute(new HttpGet(url));
-        return parser.parse(EntityUtils.toString(response.getEntity(), Charsets.UTF_8));
+        return parser.parse(EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8));
     }
 }
