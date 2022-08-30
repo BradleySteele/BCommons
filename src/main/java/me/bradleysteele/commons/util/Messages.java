@@ -1,5 +1,7 @@
 package me.bradleysteele.commons.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 
 import java.text.CharacterIterator;
@@ -22,6 +24,8 @@ public final class Messages {
     private static final char BUKKIT_COLOUR_CODE = ChatColor.COLOR_CHAR;
     private static final char ALT_COLOUR_CODE = '&';
 
+    public static final Pattern HEX_PATTERN = Pattern.compile("(?<!\\\\)(&)?(#)([a-fA-F0-9]{6})");
+
     // Suppresses default constructor.
     private Messages() {
 
@@ -34,7 +38,27 @@ public final class Messages {
      * @return coloured string.
      */
     public static String colour(String s) {
-        return s != null ? ChatColor.translateAlternateColorCodes(ALT_COLOUR_CODE, s) : null;
+        if (s == null) {
+            return null;
+        }
+
+        StringBuilder sb = new StringBuilder(s.length());
+        Matcher m = HEX_PATTERN.matcher(s);
+
+        while (m.find()) {
+            String hex = m.group(3);
+            StringBuilder res = new StringBuilder(BUKKIT_COLOUR_CODE + "x");
+
+            for (char digit : hex.toCharArray()) {
+                res.append(BUKKIT_COLOUR_CODE).append(digit);
+            }
+
+            m.appendReplacement(sb, Matcher.quoteReplacement(res.toString()));
+        }
+
+        m.appendTail(sb);
+
+        return ChatColor.translateAlternateColorCodes(ALT_COLOUR_CODE, sb.toString());
     }
 
     /**
